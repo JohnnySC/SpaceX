@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SpaceX</string>
+    <string name="tutorial">Welcome to SpaceX launches app. To find some information about SpaceX launches just type the
+        year in the action bar.
+    </string>
+    <string name="no_results">No Results</string>
+    <string name="search_results">Search Results</string>
+    <string name="no_connection">No connection to network. Please, check that and try again later.</string>
+    <string name="action_search">search</string>
+    <string name="service_unavailable">Service is unavailable. Try again later.</string>
 </resources>

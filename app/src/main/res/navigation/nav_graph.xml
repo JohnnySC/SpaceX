@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/nav_graph.xml"
+            app:startDestination="@id/start">
+
+    <fragment android:id="@+id/start"
+              android:label="@string/app_name"
+              android:name="com.github.johnnysc.spacex.StartingFragment"
+              tools:layout="@layout/fragment_starting"/>
+
+    <fragment android:id="@+id/no_results"
+              android:label="@string/no_results"
+              android:name="com.github.johnnysc.spacex.NoResultsFragment"
+              tools:layout="@layout/fragment_no_results"/>
+
+    <fragment android:id="@+id/search_results"
+              android:label="@string/search_results"
+              android:name="com.github.johnnysc.spacex.SearchResults"
+              tools:layout="@layout/fragment_search_results"/>
+
+    <fragment android:id="@+id/no_connection"
+              android:label="@string/no_connection"
+              android:name="com.github.johnnysc.spacex.NoConnectionFragment"
+              tools:layout="@layout/fragment_no_connection"/>
+
+    <fragment android:id="@+id/service_unavailable"
+              android:label="@string/service_unavailable"
+              android:name="com.github.johnnysc.spacex.ServiceUnavailableFragment"
+              tools:layout="@layout/fragment_service_unavailable"/>
+</navigation>
