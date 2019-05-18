@@ -1,7 +1,8 @@
-package com.github.johnnysc.spacex
+package com.github.johnnysc.spacex.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.johnnysc.spacex.R
 
 /**
  * @author Asatryan on 18.05.19

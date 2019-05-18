@@ -1,4 +1,4 @@
-package com.github.johnnysc.spacex
+package com.github.johnnysc.spacex.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.github.johnnysc.spacex.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

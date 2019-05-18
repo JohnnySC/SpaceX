@@ -1,4 +1,4 @@
-package com.github.johnnysc.spacex
+package com.github.johnnysc.spacex.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
