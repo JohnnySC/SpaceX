@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         })
         viewModel.progressState.observe(this, Observer<Boolean> { show ->
             progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        })
+        viewModel.errorState.observe(this, Observer<Int> { message ->
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         })
     }
 

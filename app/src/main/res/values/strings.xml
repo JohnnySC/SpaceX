@@ -8,4 +8,5 @@
     <string name="no_connection">No connection to network. Please, check that and try again later.</string>
     <string name="action_search">search</string>
     <string name="service_unavailable">Service is unavailable. Try again later.</string>
+    <string name="invalid_input_message">Input data is invalid! Please type the year of launches (e.g. 2018)</string>
 </resources>

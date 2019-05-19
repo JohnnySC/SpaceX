@@ -19,17 +19,22 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     val searchState = MutableLiveData<Int>()
     val progressState = MutableLiveData<Boolean>()
+    val errorState = MutableLiveData<Int>()
 
     fun fetch(query: String?) {
-        progressState.value = true
-        viewModelScope.launch {
-            when (interactor.fetch(query)) {
-                Status.NO_RESULTS -> showScreenWithId(R.id.no_results)
-                Status.NO_CONNECTION -> showScreenWithId(R.id.no_connection)
-                Status.SERVICE_UNAVAILABLE -> showScreenWithId(R.id.service_unavailable)
-                Status.SUCCESS -> showScreenWithId(R.id.go_to_search_results)
-                Status.UNKNOWN -> progressState.postValue(false)
+        val inputDataValid = interactor.isInputDataValid(query)
+        if (inputDataValid == true) {
+            progressState.value = true
+            viewModelScope.launch {
+                when (interactor.fetch(query!!)) {
+                    Status.NO_RESULTS -> showScreenWithId(R.id.no_results)
+                    Status.NO_CONNECTION -> showScreenWithId(R.id.no_connection)
+                    Status.SERVICE_UNAVAILABLE -> showScreenWithId(R.id.service_unavailable)
+                    Status.SUCCESS -> showScreenWithId(R.id.go_to_search_results)
+                }
             }
+        } else if (inputDataValid == false) {
+            errorState.value = R.string.invalid_input_message
         }
     }
 

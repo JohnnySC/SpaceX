@@ -6,6 +6,7 @@ import com.github.johnnysc.spacex.data.LaunchDataMapper
 import com.github.johnnysc.spacex.data.SearchResultsMapper
 import com.github.johnnysc.spacex.data.network.ConnectionManagerImpl
 import com.github.johnnysc.spacex.data.LaunchesRepositoryImpl
+import com.github.johnnysc.spacex.data.YearValidator
 import com.github.johnnysc.spacex.data.network.LaunchesService
 import com.github.johnnysc.spacex.data.cache.CacheManager
 import com.github.johnnysc.spacex.data.cache.CacheManagerImpl
@@ -95,7 +96,7 @@ class DI(private val application: App) {
         LaunchesRepositoryImpl(service, cacheManager)
 
     private fun getLaunchesInteractor(repository: LaunchesRepository, connectionManager: ConnectionManager) =
-        LaunchesInteractorImpl(repository, connectionManager)
+        LaunchesInteractorImpl(repository, connectionManager, YearValidator())
 
     private fun getSearchResultsInteractor(repository: LaunchesRepository, searchResultsMapper: SearchResultsMapper) =
         SearchResultsInteractorImpl(repository, searchResultsMapper)

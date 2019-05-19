@@ -5,13 +5,14 @@ package com.github.johnnysc.spacex.domain
  */
 interface LaunchesInteractor {
 
-    suspend fun fetch(year: String?): Status
+    fun isInputDataValid(year: String?): Boolean?
+
+    suspend fun fetch(year: String): Status
 }
 
 enum class Status {
     NO_RESULTS,
     SERVICE_UNAVAILABLE,
     NO_CONNECTION,
-    SUCCESS,
-    UNKNOWN
+    SUCCESS
 }
