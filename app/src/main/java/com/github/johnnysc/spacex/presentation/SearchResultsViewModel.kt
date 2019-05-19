@@ -1,18 +1,19 @@
 package com.github.johnnysc.spacex.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.github.johnnysc.spacex.di.DI
+import com.github.johnnysc.spacex.App
 import com.github.johnnysc.spacex.domain.SearchResultsInteractor
 
 /**
  * @author Asatryan on 19.05.19
  */
-class SearchResultsViewModel : ViewModel() {
+class SearchResultsViewModel(application: Application) : AndroidViewModel(application) {
 
     val results = MutableLiveData<List<String>>()
 
-    private val interactor: SearchResultsInteractor = DI.instance.getSearchResultsInteractor()
+    private val interactor: SearchResultsInteractor = (application as App).getDI().getSearchResultsInteractor()
 
     fun showResults() {
         results.value = interactor.getResults()

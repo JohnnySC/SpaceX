@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -27,8 +28,11 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController)
 
         viewModel = ViewModelProviders.of(this).get(MainScreenViewModel::class.java)
-        viewModel.searchState.observe(this, Observer<Int> {
-            navController.navigate(it)
+        viewModel.searchState.observe(this, Observer<Int> { id ->
+            navController.navigate(id)
+        })
+        viewModel.progressState.observe(this, Observer<Boolean> { show ->
+            progressBar.visibility = if (show) View.VISIBLE else View.GONE
         })
     }
 

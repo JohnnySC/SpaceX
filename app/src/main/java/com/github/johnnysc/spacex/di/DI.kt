@@ -20,24 +20,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * @author Asatryan on 19.05.19
  */
-class DI private constructor() {
+class DI(private val application: App) {
 
-    var application: App? = null
-    private lateinit var retrofit: Retrofit
-    private lateinit var repository: LaunchesRepository
-    private lateinit var connectionManager: ConnectionManager
-
-    private object Holder {
-        val INSTANCE = DI()
-    }
+    private var retrofit: Retrofit
+    private var repository: LaunchesRepository
+    private var connectionManager: ConnectionManager
 
     companion object {
         const val BASE_URL = "https://api.spacexdata.com/v2/"
-
-        val instance: DI by lazy { Holder.INSTANCE }
     }
 
-    fun initialize() {
+    init {
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
         repository = getLaunchesRepository(getLaunchService(retrofit), getCacheManager())
         connectionManager = getConnectionManager()
@@ -47,7 +40,9 @@ class DI private constructor() {
 
     fun getSearchResultsInteractor() = getSearchResultsInteractor(repository, SearchResultsMapper())
 
-    private fun getConnectionManager() = ConnectionManagerImpl(application!!.applicationContext)
+    //region private methods
+
+    private fun getConnectionManager() = ConnectionManagerImpl(application.applicationContext)
 
     private fun getInterceptor(): Interceptor {
         val interceptor = HttpLoggingInterceptor()
@@ -71,7 +66,7 @@ class DI private constructor() {
 
     private fun getLaunchService(retrofit: Retrofit) = retrofit.create(LaunchesService::class.java)
 
-    private fun getCacheManager() = CacheManagerImpl(application!!.applicationContext)
+    private fun getCacheManager() = CacheManagerImpl(application.applicationContext)
 
     private fun getLaunchesRepository(service: LaunchesService, cacheManager: CacheManager) =
         LaunchesRepositoryImpl(service, cacheManager)
@@ -81,4 +76,6 @@ class DI private constructor() {
 
     private fun getSearchResultsInteractor(repository: LaunchesRepository, searchResultsMapper: SearchResultsMapper) =
         SearchResultsInteractorImpl(repository, searchResultsMapper)
+
+    //endregion
 }
