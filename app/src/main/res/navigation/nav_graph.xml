@@ -29,4 +29,10 @@
               android:label="@string/service_unavailable"
               android:name="com.github.johnnysc.spacex.presentation.fragment.ServiceUnavailableFragment"
               tools:layout="@layout/fragment_service_unavailable"/>
+
+    <action android:id="@+id/go_to_search_results"
+            app:destination="@+id/search_results"
+            app:popUpTo="@id/start"
+            app:popUpToInclusive="false"/>
+
 </navigation>

@@ -2,15 +2,14 @@ package com.github.johnnysc.spacex.di
 
 import com.github.johnnysc.spacex.App
 import com.github.johnnysc.spacex.BuildConfig
+import com.github.johnnysc.spacex.data.SearchResultsMapper
 import com.github.johnnysc.spacex.data.network.ConnectionManagerImpl
 import com.github.johnnysc.spacex.data.LaunchesRepositoryImpl
 import com.github.johnnysc.spacex.data.network.LaunchesService
 import com.github.johnnysc.spacex.data.cache.CacheManager
 import com.github.johnnysc.spacex.data.cache.CacheManagerImpl
 import com.github.johnnysc.spacex.data.network.ConnectionManager
-import com.github.johnnysc.spacex.domain.LaunchesInteractor
-import com.github.johnnysc.spacex.domain.LaunchesInteractorImpl
-import com.github.johnnysc.spacex.domain.LaunchesRepository
+import com.github.johnnysc.spacex.domain.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -44,8 +43,9 @@ class DI private constructor() {
         connectionManager = getConnectionManager()
     }
 
-    fun getLaunchesInteractor(): LaunchesInteractor =
-        getLaunchesInteractor(repository, connectionManager)
+    fun getLaunchesInteractor() = getLaunchesInteractor(repository, connectionManager)
+
+    fun getSearchResultsInteractor() = getSearchResultsInteractor(repository, SearchResultsMapper())
 
     private fun getConnectionManager() = ConnectionManagerImpl(application!!.applicationContext)
 
@@ -78,4 +78,7 @@ class DI private constructor() {
 
     private fun getLaunchesInteractor(repository: LaunchesRepository, connectionManager: ConnectionManager) =
         LaunchesInteractorImpl(repository, connectionManager)
+
+    private fun getSearchResultsInteractor(repository: LaunchesRepository, searchResultsMapper: SearchResultsMapper) =
+        SearchResultsInteractorImpl(repository, searchResultsMapper)
 }
