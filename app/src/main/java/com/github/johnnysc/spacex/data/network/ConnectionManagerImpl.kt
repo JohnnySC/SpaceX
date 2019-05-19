@@ -10,7 +10,6 @@ class ConnectionManagerImpl(private val context: Context) : ConnectionManager {
 
     override fun isNetworkAbsent(): Boolean {
         val conMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        val netInfo = conMgr?.activeNetworkInfo
-        return netInfo == null
+        return conMgr?.activeNetworkInfo == null
     }
 }

@@ -14,22 +14,23 @@ class CacheManagerImpl(context: Context) : CacheManager {
 
     override fun saveLaunches(launches: Map<String, List<LaunchesDTO>>) {
         val string = Gson().toJson(launches)
-        sharedPreferences.edit().putString(CacheManager.LAUNCHES, string).apply()
+        sharedPreferences
+            .edit()
+            .putString(CacheManager.LAUNCHES, string)
+            .apply()
     }
 
     override fun getLaunches(): MutableMap<String, List<LaunchesDTO>> {
         val string = sharedPreferences.getString(CacheManager.LAUNCHES, "")
-        if (string.isNullOrEmpty()) return HashMap()
-        val type = object : TypeToken<HashMap<String, List<LaunchesDTO>>>() {
-        }.type
+        if (string.isNullOrEmpty())
+            return HashMap()
+        val type = object : TypeToken<HashMap<String, List<LaunchesDTO>>>() {}.type
         return Gson().fromJson(string, type)
     }
 
-    override fun saveLastQuery(query: String) {
+    override fun saveLastQuery(query: String) =
         sharedPreferences.edit().putString(CacheManager.LAST_QUERY, query).apply()
-    }
 
-    override fun getLastQuery(): String {
-        return sharedPreferences.getString(CacheManager.LAST_QUERY, "") ?: ""
-    }
+    override fun getLastQuery(): String =
+        sharedPreferences.getString(CacheManager.LAST_QUERY, null) ?: ""
 }
