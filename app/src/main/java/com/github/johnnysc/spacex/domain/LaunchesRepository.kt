@@ -7,7 +7,7 @@ import com.github.johnnysc.spacex.data.LaunchesDTO
  */
 interface LaunchesRepository {
 
-    suspend fun fetch(year: String) : MutableList<LaunchesDTO>?
+    suspend fun fetch(year: String): MutableList<LaunchesDTO>?
 
-    fun getLaunchesInCache() : List<LaunchesDTO>
+    fun getLaunchesInCache(): List<LaunchesDTO>
 }

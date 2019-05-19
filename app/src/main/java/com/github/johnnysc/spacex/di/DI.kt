@@ -1,13 +1,14 @@
 package com.github.johnnysc.spacex.di
 
+import android.app.Application
 import com.github.johnnysc.spacex.App
 import com.github.johnnysc.spacex.BuildConfig
-import com.github.johnnysc.spacex.data.network.ConnectionManagerImpl
 import com.github.johnnysc.spacex.data.LaunchesRepositoryImpl
-import com.github.johnnysc.spacex.data.network.LaunchesService
 import com.github.johnnysc.spacex.data.cache.CacheManager
 import com.github.johnnysc.spacex.data.cache.CacheManagerImpl
 import com.github.johnnysc.spacex.data.network.ConnectionManager
+import com.github.johnnysc.spacex.data.network.ConnectionManagerImpl
+import com.github.johnnysc.spacex.data.network.LaunchesService
 import com.github.johnnysc.spacex.domain.LaunchesInteractor
 import com.github.johnnysc.spacex.domain.LaunchesInteractorImpl
 import com.github.johnnysc.spacex.domain.LaunchesRepository
@@ -21,24 +22,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * @author Asatryan on 19.05.19
  */
-class DI private constructor() {
-
-    var application: App? = null
+object DI {
+    private var application: App? = null
     private lateinit var retrofit: Retrofit
     private lateinit var repository: LaunchesRepository
     private lateinit var connectionManager: ConnectionManager
 
-    private object Holder {
-        val INSTANCE = DI()
-    }
+    const val BASE_URL = "https://api.spacexdata.com/v2/"
 
-    companion object {
-        const val BASE_URL = "https://api.spacexdata.com/v2/"
-
-        val instance: DI by lazy { Holder.INSTANCE }
-    }
-
-    fun initialize() {
+    fun initialize(application: App) {
+        this.application = application
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
         repository = getLaunchesRepository(getLaunchService(retrofit), getCacheManager())
         connectionManager = getConnectionManager()

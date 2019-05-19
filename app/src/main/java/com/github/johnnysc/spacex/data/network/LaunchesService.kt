@@ -12,5 +12,5 @@ import retrofit2.http.Query
 interface LaunchesService {
 
     @GET("launches")
-    fun getLaunchesAsync(@Query("launch_year") year: String) : Deferred<Response<List<LaunchesDTO>>>
+    fun getLaunchesAsync(@Query("launch_year") year: String): Deferred<Response<List<LaunchesDTO>>>
 }

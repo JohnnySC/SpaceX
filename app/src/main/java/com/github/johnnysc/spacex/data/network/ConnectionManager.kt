@@ -5,5 +5,5 @@ package com.github.johnnysc.spacex.data.network
  */
 interface ConnectionManager {
 
-    fun isNetworkAbsent() : Boolean
+    fun isNetworkAbsent(): Boolean
 }

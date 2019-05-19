@@ -14,11 +14,11 @@ import kotlinx.coroutines.launch
  */
 class MainScreenViewModel : ViewModel() {
 
-    private val interactor = DI.instance.getLaunchesInteractor()
+    private val interactor = DI.getLaunchesInteractor()
 
-    val searchState: MutableLiveData<Int> by lazy { MutableLiveData<Int>() }
+    val searchState = MutableLiveData<Int>()
 
-    fun fetch(query: String?) {
+    fun fetch(query: String) {
         viewModelScope.launch {
             when (interactor.fetch(query)) {
                 Status.NO_RESULTS -> showScreenWithId(R.id.no_results)
@@ -30,7 +30,6 @@ class MainScreenViewModel : ViewModel() {
         }
     }
 
-    private fun showScreenWithId(@IdRes id: Int) {
+    private fun showScreenWithId(@IdRes id: Int) =
         searchState.postValue(id)
-    }
 }

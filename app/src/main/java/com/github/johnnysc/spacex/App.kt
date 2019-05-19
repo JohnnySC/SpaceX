@@ -7,10 +7,8 @@ import com.github.johnnysc.spacex.di.DI
  * @author Asatryan on 19.05.19
  */
 class App : Application() {
-
     override fun onCreate() {
         super.onCreate()
-        DI.instance.application = this
-        DI.instance.initialize()
+        DI.initialize(this)
     }
 }
