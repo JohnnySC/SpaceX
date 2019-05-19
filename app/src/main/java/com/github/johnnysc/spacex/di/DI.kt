@@ -2,6 +2,7 @@ package com.github.johnnysc.spacex.di
 
 import com.github.johnnysc.spacex.App
 import com.github.johnnysc.spacex.BuildConfig
+import com.github.johnnysc.spacex.data.LaunchDataMapper
 import com.github.johnnysc.spacex.data.SearchResultsMapper
 import com.github.johnnysc.spacex.data.network.ConnectionManagerImpl
 import com.github.johnnysc.spacex.data.LaunchesRepositoryImpl
@@ -25,6 +26,9 @@ class DI(private val application: App) {
     private var retrofit: Retrofit
     private var repository: LaunchesRepository
     private var connectionManager: ConnectionManager
+    private var launchesInteractor: LaunchesInteractor? = null
+    private var searchResultsInteractor: SearchResultsInteractor? = null
+    private var launchDetailsInteractor: LaunchDetailsInteractor? = null
 
     companion object {
         const val BASE_URL = "https://api.spacexdata.com/v2/"
@@ -36,9 +40,28 @@ class DI(private val application: App) {
         connectionManager = getConnectionManager()
     }
 
-    fun getLaunchesInteractor() = getLaunchesInteractor(repository, connectionManager)
+    //todo create actualizeDataInteractor, get the current year's data and clear it on workManager when charging and idle
 
-    fun getSearchResultsInteractor() = getSearchResultsInteractor(repository, SearchResultsMapper())
+    fun getLaunchesInteractor(): LaunchesInteractor {
+        if (launchesInteractor == null) {
+            launchesInteractor = getLaunchesInteractor(repository, connectionManager)
+        }
+        return launchesInteractor!!
+    }
+
+    fun getSearchResultsInteractor(): SearchResultsInteractor {
+        if (searchResultsInteractor == null) {
+            searchResultsInteractor = getSearchResultsInteractor(repository, SearchResultsMapper())
+        }
+        return searchResultsInteractor!!
+    }
+
+    fun getLaunchDetailsInteractor(): LaunchDetailsInteractor {
+        if (launchDetailsInteractor == null) {
+            launchDetailsInteractor = getLaunchDetailsInteractor(repository, LaunchDataMapper())
+        }
+        return launchDetailsInteractor!!
+    }
 
     //region private methods
 
@@ -76,6 +99,9 @@ class DI(private val application: App) {
 
     private fun getSearchResultsInteractor(repository: LaunchesRepository, searchResultsMapper: SearchResultsMapper) =
         SearchResultsInteractorImpl(repository, searchResultsMapper)
+
+    private fun getLaunchDetailsInteractor(repository: LaunchesRepository, dataMapper: LaunchDataMapper) =
+        LaunchDetailsInteractorImpl(repository, dataMapper)
 
     //endregion
 }
