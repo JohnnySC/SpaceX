@@ -1,6 +1,7 @@
 package com.github.johnnysc.spacex.data.cache
 
 import com.github.johnnysc.spacex.data.LaunchesDTO
+import com.github.johnnysc.spacex.data.Year
 
 /**
  * @author Asatryan on 19.05.19
@@ -12,9 +13,9 @@ interface CacheManager {
         const val LAST_QUERY = "last_query"
     }
 
-    fun saveLaunches(launches: Map<String, List<LaunchesDTO>>)
+    fun saveLaunchesForYears(launches: Map<Year, List<LaunchesDTO>>)
 
-    fun getLaunches(): Map<String, List<LaunchesDTO>>
+    fun getLaunchesForYears(): Map<Year, List<LaunchesDTO>>
 
     fun saveLastQuery(query: String)
 

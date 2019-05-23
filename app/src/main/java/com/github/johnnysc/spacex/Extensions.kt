@@ -1,8 +1,9 @@
 package com.github.johnnysc.spacex
 
 import android.widget.ArrayAdapter
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import java.util.*
 
@@ -14,6 +15,22 @@ inline fun <reified T> LiveData<T>.observe(
     noinline onChanged: (t: T) -> Unit
 ): Unit =
     observe(owner, Observer(onChanged))
+
+inline fun <reified VM : ViewModel> Fragment.getViewModel(
+    factory: ViewModelProvider.Factory? = null
+): VM =
+    ViewModelProviders.of(
+        this,
+        factory
+    ).get(VM::class.java)
+
+inline fun <reified VM : ViewModel> AppCompatActivity.getViewModel(
+    factory: ViewModelProvider.Factory? = null
+): VM =
+    ViewModelProviders.of(
+        this,
+        factory
+    ).get(VM::class.java)
 
 fun ArrayAdapter<String>.update(list: List<String>) {
     clear()

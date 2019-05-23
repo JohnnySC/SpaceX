@@ -2,18 +2,21 @@ package com.github.johnnysc.spacex.presentation.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import com.github.johnnysc.spacex.R
+import com.github.johnnysc.spacex.getViewModel
 import com.github.johnnysc.spacex.observe
 import com.github.johnnysc.spacex.presentation.viewmodel.LaunchDetailsViewModel
 import kotlinx.android.synthetic.main.fragment_launch_details.*
+import org.koin.android.ext.android.get
 
 /**
  * @author Asatryan on 19.05.19
  */
 class LaunchDetailsFragment : BaseFragment(R.layout.fragment_launch_details) {
     private val viewModel: LaunchDetailsViewModel by lazy {
-        ViewModelProviders.of(this).get(LaunchDetailsViewModel::class.java)
+        getViewModel<LaunchDetailsViewModel>(
+            LaunchDetailsViewModel.Factory(get(), get())
+        )
     }
 
     companion object {
@@ -22,12 +25,13 @@ class LaunchDetailsFragment : BaseFragment(R.layout.fragment_launch_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val position = arguments?.getInt(EXTRA_POSITION, 0)
 
         viewModel.launchData.observe(this) {
             textView.text = it.toString() //just to check all the data was parsed good
             //rootRecyclerView.adapter TODO set adapter with data
         }
-        viewModel.showData(position ?: 0)
+
+        val position = arguments?.getInt(EXTRA_POSITION, 0) ?: 0
+        viewModel.showData(position)
     }
 }

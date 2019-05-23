@@ -1,5 +1,6 @@
 package com.github.johnnysc.spacex.domain.interactor.launch
 
+import com.github.johnnysc.spacex.data.Year
 import com.github.johnnysc.spacex.data.YearValidator
 import com.github.johnnysc.spacex.data.network.ConnectionManager
 import com.github.johnnysc.spacex.domain.LaunchesRepository
@@ -13,10 +14,10 @@ class LaunchesInteractorImpl(
     private val yearValidator: YearValidator
 ) : LaunchesInteractor {
 
-    override fun isInputDataValid(year: String): Boolean? =
+    override fun isInputDataValid(year: Year): Boolean? =
         yearValidator.isValid(year)
 
-    override suspend fun fetch(year: String): Status =
+    override suspend fun fetch(year: Year): Status =
         if (connectionManager.isNetworkAbsent()) {
             Status.NoConnection
         } else {

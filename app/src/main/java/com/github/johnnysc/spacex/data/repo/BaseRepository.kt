@@ -1,4 +1,4 @@
-package com.github.johnnysc.spacex.data
+package com.github.johnnysc.spacex.data.repo
 
 import android.util.Log
 import retrofit2.Response
@@ -9,12 +9,18 @@ import java.io.IOException
  */
 open class BaseRepository {
 
-    suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>, errorMessage: String): T? =
-        safeApiResult(call, errorMessage)
+    suspend fun <T : Any> safeApiCall(
+        errorMessage: String,
+        call: suspend () -> Response<T>
+    ): T? =
+        safeApiResult(errorMessage, call)
             .onFailure { Log.d("BaseRepository", "$errorMessage & Exception - $it") }
             .getOrNull()
 
-    private suspend fun <T : Any> safeApiResult(call: suspend () -> Response<T>, errorMessage: String): Result<T> {
+    private suspend inline fun <T : Any> safeApiResult(
+        errorMessage: String,
+        crossinline call: suspend () -> Response<T>
+    ): Result<T> {
         val responseBody = call.invoke().body()
         return if (responseBody != null)
             Result.success(responseBody)

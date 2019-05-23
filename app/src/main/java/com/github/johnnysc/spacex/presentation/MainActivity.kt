@@ -7,10 +7,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.ViewModelProviders
+import org.koin.android.ext.android.get
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.github.johnnysc.spacex.R
+import com.github.johnnysc.spacex.getViewModel
 import com.github.johnnysc.spacex.observe
 import com.github.johnnysc.spacex.presentation.viewmodel.MainScreenViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +19,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainScreenViewModel by lazy {
-        ViewModelProviders.of(this).get(MainScreenViewModel::class.java)
+        getViewModel<MainScreenViewModel>(
+            MainScreenViewModel.Factory(get(), get())
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

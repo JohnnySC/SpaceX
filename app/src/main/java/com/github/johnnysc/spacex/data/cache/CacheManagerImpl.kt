@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.github.johnnysc.spacex.data.LaunchesDTO
+import com.github.johnnysc.spacex.data.Year
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -15,17 +16,17 @@ class CacheManagerImpl(context: Context) : CacheManager {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("cache", Context.MODE_PRIVATE)
 
-    override fun saveLaunches(launches: Map<String, List<LaunchesDTO>>) {
+    override fun saveLaunchesForYears(launches: Map<Year, List<LaunchesDTO>>) {
         val string = Gson().toJson(launches)
         sharedPreferences.edit { putString(CacheManager.LAUNCHES, string) }
     }
 
-    override fun getLaunches(): Map<String, List<LaunchesDTO>> {
+    override fun getLaunchesForYears(): Map<Year, List<LaunchesDTO>> {
         val string = sharedPreferences.getString(CacheManager.LAUNCHES, "")
         if (string.isNullOrEmpty())
             return HashMap()
 
-        val type = object : TypeToken<HashMap<String, List<LaunchesDTO>>>() {}.type
+        val type = object : TypeToken<HashMap<Year, List<LaunchesDTO>>>() {}.type
         return Gson().fromJson(string, type)
     }
 
