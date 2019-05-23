@@ -9,31 +9,16 @@ import java.io.IOException
  */
 open class BaseRepository {
 
-    suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>, errorMessage: String): T? {
-
-        val result: Result<T> = safeApiResult(call, errorMessage)
-        var data: T? = null
-
-        when (result) {
-            is Result.Success ->
-                data = result.data
-            is Result.Error -> {
-                Log.d("BaseRepository", "$errorMessage & Exception - ${result.exception}")
-            }
-        }
-
-        return data
-    }
+    suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>, errorMessage: String): T? =
+        safeApiResult(call, errorMessage)
+            .onFailure { Log.d("BaseRepository", "$errorMessage & Exception - $it") }
+            .getOrNull()
 
     private suspend fun <T : Any> safeApiResult(call: suspend () -> Response<T>, errorMessage: String): Result<T> {
-        val response = call.invoke()
-        if (response.isSuccessful) return Result.Success(response.body()!!)
-
-        return Result.Error(IOException("Error Occurred during getting safe Api result, Custom ERROR - $errorMessage"))
+        val responseBody = call.invoke().body()
+        return if (responseBody != null)
+            Result.success(responseBody)
+        else
+            Result.failure(IOException("Error Occurred during getting safe Api result, Custom ERROR - $errorMessage"))
     }
-}
-
-sealed class Result<out T : Any> {
-    data class Success<out T : Any>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
 }

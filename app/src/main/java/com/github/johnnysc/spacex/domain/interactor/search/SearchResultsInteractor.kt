@@ -1,4 +1,4 @@
-package com.github.johnnysc.spacex.domain
+package com.github.johnnysc.spacex.domain.interactor.search
 
 /**
  * @author Asatryan on 19.05.19

@@ -12,30 +12,30 @@ class LaunchesRepositoryImpl(
     private val cacheManager: CacheManager
 ) : BaseRepository(), LaunchesRepository {
 
-    override suspend fun fetch(year: String): MutableList<LaunchesDTO>? {
+    override suspend fun fetch(year: String): List<LaunchesDTO>? {
         val dataCache = cacheManager.getLaunches()
         if (dataCache.containsKey(year)) {
             cacheManager.saveLastQuery(year)
-            return dataCache[year]?.toMutableList()
+            return dataCache[year]
         }
 
-        val response = safeApiCall(
+        val response: List<LaunchesDTO>? = safeApiCall(
             call = { service.getLaunchesAsync(year).await() },
             errorMessage = "Error while fetching launches data"
         )
 
         if (response != null && response.isNotEmpty()) {
             cacheManager.saveLastQuery(year)
-            val map: MutableMap<String, List<LaunchesDTO>> = cacheManager.getLaunches()
+            val map: MutableMap<String, List<LaunchesDTO>> = cacheManager.getLaunches().toMutableMap()
             map[year] = response
             cacheManager.saveLaunches(map)
         }
-        return response?.toMutableList()
+        return response
     }
 
     override fun getLaunchesInCache(): List<LaunchesDTO> {
         val launches = cacheManager.getLaunches()
         val lastQuery = cacheManager.getLastQuery()
-        return if (launches.containsKey(lastQuery)) launches[lastQuery]!! else emptyList()
+        return launches[lastQuery] ?: emptyList()
     }
 }

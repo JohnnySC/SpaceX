@@ -1,4 +1,4 @@
-package com.github.johnnysc.spacex.domain
+package com.github.johnnysc.spacex.domain.entity
 
 import com.github.johnnysc.spacex.data.RocketDTO
 

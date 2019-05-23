@@ -14,7 +14,7 @@ interface CacheManager {
 
     fun saveLaunches(launches: Map<String, List<LaunchesDTO>>)
 
-    fun getLaunches(): MutableMap<String, List<LaunchesDTO>>
+    fun getLaunches(): Map<String, List<LaunchesDTO>>
 
     fun saveLastQuery(query: String)
 

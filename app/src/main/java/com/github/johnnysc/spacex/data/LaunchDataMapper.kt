@@ -1,9 +1,9 @@
 package com.github.johnnysc.spacex.data
 
-import com.github.johnnysc.spacex.domain.ImageLink
-import com.github.johnnysc.spacex.domain.LaunchData
-import com.github.johnnysc.spacex.domain.Link
-import com.github.johnnysc.spacex.domain.PDFLink
+import com.github.johnnysc.spacex.domain.entity.ImageLink
+import com.github.johnnysc.spacex.domain.entity.LaunchData
+import com.github.johnnysc.spacex.domain.entity.Link
+import com.github.johnnysc.spacex.domain.entity.PDFLink
 import com.google.gson.internal.bind.util.ISO8601Utils
 import java.text.DateFormat
 import java.text.ParsePosition
@@ -16,8 +16,8 @@ import kotlin.collections.ArrayList
  */
 class LaunchDataMapper : Mapper<LaunchesDTO, LaunchData> {
 
-    override fun map(source: LaunchesDTO): LaunchData {
-        return LaunchData(
+    override fun map(source: LaunchesDTO): LaunchData =
+        LaunchData(
             source.flightNumber,
             source.missionName,
             source.launchYear,
@@ -36,11 +36,10 @@ class LaunchDataMapper : Mapper<LaunchesDTO, LaunchData> {
             getDate(source.staticFireDateUTC),
             source.timeline
         )
-    }
 
     private fun getPDFs(data: Map<String, Any>): List<PDFLink> {
         val list = ArrayList<PDFLink>()
-        data.forEach { (_, value) ->
+        for ((_, value) in data) {
             if (value is String && value.endsWith(".pdf"))
                 list.add(PDFLink(value))
         }
@@ -49,7 +48,7 @@ class LaunchDataMapper : Mapper<LaunchesDTO, LaunchData> {
 
     private fun getPureLinks(data: Map<String, Any>): List<Link> {
         val list = ArrayList<Link>(1)
-        data.forEach { (key, value) ->
+        for ((key, value) in data) {
             if (value is String && key != "youtube_id") {
                 if (!value.endsWith(".png") &&
                     !value.endsWith(".pdf") &&
@@ -63,33 +62,30 @@ class LaunchDataMapper : Mapper<LaunchesDTO, LaunchData> {
     }
 
     private fun getImages(data: Map<String, Any>): List<ImageLink> {
-        val list = ArrayList<ImageLink>()
-        data.forEach { (_, value) ->
+        val result = ArrayList<ImageLink>()
+        for ((_, value) in data) {
             if (value is String) {
                 if (value.endsWith(".png") ||
                     value.endsWith(".jpg") ||
                     value.endsWith(".jpeg")
                 )
-                    list.add(ImageLink(value))
+                    result.add(ImageLink(value))
 
             } else if (value is List<*>) {
-                value.forEach {
-                    if (it is String && (it.endsWith(".png") ||
-                                it.endsWith(".jpg") ||
-                                it.endsWith(".jpeg"))
+                for (address in value) {
+                    if (address is String && (address.endsWith(".png") ||
+                                address.endsWith(".jpg") ||
+                                address.endsWith(".jpeg"))
                     )
-                        list.add(ImageLink(it))
+                        result.add(ImageLink(address))
                 }
             }
         }
-        return list
+        return result
     }
 
-    private fun makeLinks(data: Map<String, String>): List<Link> {
-        val list = ArrayList<Link>(data.size)
-        data.forEach { (_, v) -> list.add(Link(v)) }
-        return list
-    }
+    private fun makeLinks(data: Map<String, String>): List<Link> =
+        data.map { Link(it.value) }
 
     private fun getDate(source: String): String {
         val dateFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy' at 'HH:mm", Locale.US)

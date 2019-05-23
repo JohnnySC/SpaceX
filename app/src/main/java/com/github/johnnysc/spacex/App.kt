@@ -7,13 +7,11 @@ import com.github.johnnysc.spacex.di.DI
  * @author Asatryan on 19.05.19
  */
 class App : Application() {
-
-    private lateinit var di: DI
+    lateinit var di: DI
+        private set
 
     override fun onCreate() {
         super.onCreate()
         di = DI(this)
     }
-
-    fun getDI() = di
 }

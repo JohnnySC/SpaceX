@@ -1,6 +1,7 @@
-package com.github.johnnysc.spacex.domain
+package com.github.johnnysc.spacex.domain.interactor.launch.details
 
 import com.github.johnnysc.spacex.data.LaunchDataMapper
+import com.github.johnnysc.spacex.domain.LaunchesRepository
 
 /**
  * @author Asatryan on 19.05.19

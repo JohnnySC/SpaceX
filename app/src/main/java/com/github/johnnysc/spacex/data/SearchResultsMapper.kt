@@ -5,7 +5,6 @@ package com.github.johnnysc.spacex.data
  */
 class SearchResultsMapper : Mapper<List<LaunchesDTO>, List<String>> {
 
-    override fun map(source: List<LaunchesDTO>): List<String> {
-        return source.mapNotNull { it.missionName }
-    }
+    override fun map(source: List<LaunchesDTO>): List<String> =
+        source.map { it.missionName }
 }
