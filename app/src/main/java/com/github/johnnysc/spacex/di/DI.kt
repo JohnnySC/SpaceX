@@ -1,7 +1,6 @@
 package com.github.johnnysc.spacex.di
 
 import com.github.johnnysc.spacex.App
-import com.github.johnnysc.spacex.BuildConfig
 import com.github.johnnysc.spacex.data.LaunchDataMapper
 import com.github.johnnysc.spacex.data.LaunchesRepositoryImpl
 import com.github.johnnysc.spacex.data.SearchResultsMapper
@@ -19,6 +18,7 @@ import com.github.johnnysc.spacex.domain.interactor.launch.details.LaunchDetails
 import com.github.johnnysc.spacex.domain.interactor.search.SearchResultsInteractor
 import com.github.johnnysc.spacex.domain.interactor.search.SearchResultsInteractorImpl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.picasso.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

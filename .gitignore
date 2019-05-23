@@ -8,4 +8,5 @@
 /build
 /captures
 app/app.iml
+app/build
 .externalNativeBuild
