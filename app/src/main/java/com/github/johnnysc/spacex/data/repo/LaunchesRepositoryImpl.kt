@@ -35,7 +35,7 @@ class LaunchesRepositoryImpl constructor(
         }
     }
 
-    override fun getLaunchesInCache(): List<LaunchesDTO> {
+    override suspend fun getLaunches(): List<LaunchesDTO> {
         val launches = cacheManager.getLaunchesForYears()
         val lastQuery = cacheManager.getLastQuery()
         return launches[lastQuery] ?: emptyList()

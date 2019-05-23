@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 
 inline val currentYear: Int
@@ -37,3 +40,6 @@ fun ArrayAdapter<String>.update(list: List<String>) {
     addAll(list)
     notifyDataSetChanged()
 }
+
+suspend inline fun <T> def(noinline block: suspend CoroutineScope.() -> T): T =
+    withContext(Dispatchers.Default, block = block)

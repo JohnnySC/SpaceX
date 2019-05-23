@@ -1,12 +1,10 @@
 package com.github.johnnysc.spacex.presentation.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.github.johnnysc.spacex.domain.entity.LaunchData
 import com.github.johnnysc.spacex.domain.interactor.launch.details.LaunchDetailsInteractor
+import kotlinx.coroutines.launch
 
 /**
  * @author Asatryan on 19.05.19
@@ -19,7 +17,9 @@ class LaunchDetailsViewModel(
     val launchData = MutableLiveData<LaunchData>()
 
     fun showData(position: Int) {
-        launchData.value = interactor.getLaunchData(position)
+        viewModelScope.launch {
+            launchData.value = interactor.getLaunchData(position)
+        }
     }
 
     class Factory(

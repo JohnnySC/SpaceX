@@ -7,5 +7,5 @@ import com.github.johnnysc.spacex.domain.entity.LaunchData
  */
 interface LaunchDetailsInteractor {
 
-    fun getLaunchData(position: Int) : LaunchData
+    suspend fun getLaunchData(position: Int): LaunchData
 }

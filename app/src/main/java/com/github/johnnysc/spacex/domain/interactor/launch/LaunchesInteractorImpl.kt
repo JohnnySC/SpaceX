@@ -3,6 +3,7 @@ package com.github.johnnysc.spacex.domain.interactor.launch
 import com.github.johnnysc.spacex.data.Year
 import com.github.johnnysc.spacex.data.YearValidator
 import com.github.johnnysc.spacex.data.network.ConnectionManager
+import com.github.johnnysc.spacex.def
 import com.github.johnnysc.spacex.domain.LaunchesRepository
 
 /**
@@ -17,7 +18,7 @@ class LaunchesInteractorImpl(
     override fun isInputDataValid(year: Year): Boolean? =
         yearValidator.isValid(year)
 
-    override suspend fun fetch(year: Year): Status =
+    override suspend fun fetch(year: Year): Status = def {
         if (connectionManager.isNetworkAbsent()) {
             Status.NoConnection
         } else {
@@ -28,4 +29,5 @@ class LaunchesInteractorImpl(
                 else -> Status.Success
             }
         }
+    }
 }

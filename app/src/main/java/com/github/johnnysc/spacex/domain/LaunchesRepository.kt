@@ -10,5 +10,5 @@ interface LaunchesRepository {
 
     suspend fun fetch(year: Year): List<LaunchesDTO>?
 
-    fun getLaunchesInCache() : List<LaunchesDTO>
+    suspend fun getLaunches(): List<LaunchesDTO>
 }

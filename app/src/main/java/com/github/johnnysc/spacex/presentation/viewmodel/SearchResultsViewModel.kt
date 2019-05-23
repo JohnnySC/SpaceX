@@ -1,11 +1,9 @@
 package com.github.johnnysc.spacex.presentation.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.github.johnnysc.spacex.domain.interactor.search.SearchResultsInteractor
+import kotlinx.coroutines.launch
 
 /**
  * @author Asatryan on 19.05.19
@@ -18,7 +16,9 @@ class SearchResultsViewModel(
     val resultsLiveData = MutableLiveData<List<String>>()
 
     fun showResults() {
-        resultsLiveData.value = interactor.getResults()
+        viewModelScope.launch {
+            resultsLiveData.value = interactor.getResults()
+        }
     }
 
     class Factory(

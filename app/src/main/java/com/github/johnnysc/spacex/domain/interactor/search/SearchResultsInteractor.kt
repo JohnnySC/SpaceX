@@ -5,5 +5,5 @@ package com.github.johnnysc.spacex.domain.interactor.search
  */
 interface SearchResultsInteractor {
 
-    fun getResults(): List<String>
+    suspend fun getResults(): List<String>
 }
