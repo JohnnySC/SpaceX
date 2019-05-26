@@ -23,6 +23,9 @@ android {
 }
 
 dependencies {
+    compile project(':domain')
+    api project(':data')
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -39,16 +42,6 @@ dependencies {
     //liveData
     implementation "android.arch.lifecycle:extensions:$arch_lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$arch_lifecycle_version"
-
-    //retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-
-    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$coroutines_adapter_version"
-
-    //okhttp
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
 
     //picasso
     implementation ("com.squareup.picasso:picasso:$picasso_version"){

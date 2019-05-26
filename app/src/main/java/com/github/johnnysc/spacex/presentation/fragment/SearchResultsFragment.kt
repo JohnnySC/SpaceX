@@ -10,11 +10,16 @@ import androidx.navigation.Navigation
 import com.github.johnnysc.spacex.R
 import com.github.johnnysc.spacex.presentation.SearchResultsViewModel
 import kotlinx.android.synthetic.main.fragment_search_results.*
+import java.util.*
 
 /**
  * @author Asatryan on 18.05.19
  */
 class SearchResultsFragment : BaseFragment(R.layout.fragment_search_results) {
+
+    companion object {
+        const val EXTRA_YEAR = "extra_year"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,11 +33,12 @@ class SearchResultsFragment : BaseFragment(R.layout.fragment_search_results) {
                     onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
                         Navigation.findNavController(view).navigate(R.id.details_screen, Bundle().apply {
                             putInt(LaunchDetailsFragment.EXTRA_POSITION, position)
+                            putString(LaunchDetailsFragment.EXTRA_YEAR, arguments?.getString(EXTRA_YEAR))
                         })
                     }
                 }
             })
-            model.showResults()
+            model.showResults(arguments?.getString(EXTRA_YEAR) ?: Calendar.getInstance().get(Calendar.YEAR).toString())
         }
     }
 }

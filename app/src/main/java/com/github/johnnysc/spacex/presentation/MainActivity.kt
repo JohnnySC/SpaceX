@@ -29,8 +29,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController)
 
         viewModel = ViewModelProviders.of(this).get(MainScreenViewModel::class.java)
-        viewModel.searchState.observe(this, Observer<Int> { id ->
-            navController.navigate(id)
+        viewModel.searchState.observe(this, Observer<Pair<Int, Bundle>> { data ->
+            navController.navigate(data.first, data.second)
         })
         viewModel.progressState.observe(this, Observer<Boolean> { show ->
             progressBar.visibility = if (show) View.VISIBLE else View.GONE

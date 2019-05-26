@@ -1,17 +1,20 @@
 package com.github.johnnysc.spacex.di
 
+import com.github.johnnysc.data.cache.LaunchesCache
+import com.github.johnnysc.data.cache.LaunchesCacheImpl
+import com.github.johnnysc.data.entity.mapper.LaunchDataMapper
 import com.github.johnnysc.spacex.App
 import com.github.johnnysc.spacex.BuildConfig
-import com.github.johnnysc.spacex.data.LaunchDataMapper
-import com.github.johnnysc.spacex.data.SearchResultsMapper
-import com.github.johnnysc.spacex.data.network.ConnectionManagerImpl
-import com.github.johnnysc.spacex.data.LaunchesRepositoryImpl
-import com.github.johnnysc.spacex.data.YearValidator
-import com.github.johnnysc.spacex.data.network.LaunchesService
-import com.github.johnnysc.spacex.data.cache.CacheManager
-import com.github.johnnysc.spacex.data.cache.CacheManagerImpl
-import com.github.johnnysc.spacex.data.network.ConnectionManager
-import com.github.johnnysc.spacex.domain.*
+import com.github.johnnysc.domain.validator.YearValidator
+import com.github.johnnysc.data.net.ConnectionManager
+import com.github.johnnysc.data.net.ConnectionManagerImpl
+import com.github.johnnysc.data.net.LaunchesService
+import com.github.johnnysc.data.repository.LaunchesRepositoryImpl
+import com.github.johnnysc.data.repository.datasource.CloudLaunchesDataStore
+import com.github.johnnysc.data.repository.datasource.DiskLaunchesDataStore
+import com.github.johnnysc.data.repository.datasource.LaunchesDataStoreFactory
+import com.github.johnnysc.domain.interactor.*
+import com.github.johnnysc.domain.repository.LaunchesRepository
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -27,8 +30,8 @@ class DI(private val application: App) {
     private var retrofit: Retrofit
     private var repository: LaunchesRepository
     private var connectionManager: ConnectionManager
+    private var launchesCache: LaunchesCache
     private var launchesInteractor: LaunchesInteractor? = null
-    private var searchResultsInteractor: SearchResultsInteractor? = null
     private var launchDetailsInteractor: LaunchDetailsInteractor? = null
 
     companion object {
@@ -36,37 +39,33 @@ class DI(private val application: App) {
     }
 
     init {
+        launchesCache = LaunchesCacheImpl(application.applicationContext)
+        connectionManager = ConnectionManagerImpl(application.applicationContext)
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
-        repository = getLaunchesRepository(getLaunchService(retrofit), getCacheManager())
-        connectionManager = getConnectionManager()
+        repository = getLaunchesRepository()
     }
 
     //todo create actualizeDataInteractor, get the current year's data and clear it on workManager when charging and idle
 
+    fun getSearchResultsInteractor() = SearchResultsInteractorImpl(repository)
+
     fun getLaunchesInteractor(): LaunchesInteractor {
         if (launchesInteractor == null) {
-            launchesInteractor = getLaunchesInteractor(repository, connectionManager)
+            launchesInteractor = makeLaunchesInteractor(repository)
         }
         return launchesInteractor!!
     }
 
-    fun getSearchResultsInteractor(): SearchResultsInteractor {
-        if (searchResultsInteractor == null) {
-            searchResultsInteractor = getSearchResultsInteractor(repository, SearchResultsMapper())
-        }
-        return searchResultsInteractor!!
-    }
-
     fun getLaunchDetailsInteractor(): LaunchDetailsInteractor {
         if (launchDetailsInteractor == null) {
-            launchDetailsInteractor = getLaunchDetailsInteractor(repository, LaunchDataMapper())
+            launchDetailsInteractor = getLaunchDetailsInteractor(repository)
         }
         return launchDetailsInteractor!!
     }
 
     //region private methods
 
-    private fun getConnectionManager() = ConnectionManagerImpl(application.applicationContext)
+    private fun getConnectionManager() = connectionManager
 
     private fun getInterceptor(): Interceptor {
         val interceptor = HttpLoggingInterceptor()
@@ -90,19 +89,23 @@ class DI(private val application: App) {
 
     private fun getLaunchService(retrofit: Retrofit) = retrofit.create(LaunchesService::class.java)
 
-    private fun getCacheManager() = CacheManagerImpl(application.applicationContext)
+    private fun getLaunchesCache() = launchesCache
 
-    private fun getLaunchesRepository(service: LaunchesService, cacheManager: CacheManager) =
-        LaunchesRepositoryImpl(service, cacheManager)
+    private fun getLaunchesRepository() =
+        LaunchesRepositoryImpl(getLaunchesDataStoreFactory(), LaunchDataMapper())
 
-    private fun getLaunchesInteractor(repository: LaunchesRepository, connectionManager: ConnectionManager) =
-        LaunchesInteractorImpl(repository, connectionManager, YearValidator())
+    private fun getDiskLaunchesDataStore() = DiskLaunchesDataStore(getLaunchesCache())
+    private fun getCloudLaunchesDataStore() =
+        CloudLaunchesDataStore(getConnectionManager(), getLaunchService(retrofit), getLaunchesCache())
 
-    private fun getSearchResultsInteractor(repository: LaunchesRepository, searchResultsMapper: SearchResultsMapper) =
-        SearchResultsInteractorImpl(repository, searchResultsMapper)
+    private fun getLaunchesDataStoreFactory() =
+        LaunchesDataStoreFactory(getLaunchesCache(), getDiskLaunchesDataStore(), getCloudLaunchesDataStore())
 
-    private fun getLaunchDetailsInteractor(repository: LaunchesRepository, dataMapper: LaunchDataMapper) =
-        LaunchDetailsInteractorImpl(repository, dataMapper)
+    private fun makeLaunchesInteractor(repository: LaunchesRepository) =
+        LaunchesInteractorImpl(repository, YearValidator())
+
+    private fun getLaunchDetailsInteractor(repository: LaunchesRepository) =
+        LaunchDetailsInteractorImpl(repository)
 
     //endregion
 }
