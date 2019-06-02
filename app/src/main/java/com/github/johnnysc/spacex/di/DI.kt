@@ -1,5 +1,7 @@
 package com.github.johnnysc.spacex.di
 
+import android.content.Context
+import android.net.ConnectivityManager
 import com.github.johnnysc.data.cache.LaunchesCache
 import com.github.johnnysc.data.cache.LaunchesCacheImpl
 import com.github.johnnysc.data.entity.mapper.LaunchDataMapper
@@ -12,7 +14,7 @@ import com.github.johnnysc.data.net.LaunchesService
 import com.github.johnnysc.data.repository.LaunchesRepositoryImpl
 import com.github.johnnysc.data.repository.datasource.CloudLaunchesDataStore
 import com.github.johnnysc.data.repository.datasource.DiskLaunchesDataStore
-import com.github.johnnysc.data.repository.datasource.LaunchesDataStoreFactory
+import com.github.johnnysc.data.repository.datasource.LaunchesDataStoreFactoryImpl
 import com.github.johnnysc.domain.interactor.*
 import com.github.johnnysc.domain.repository.LaunchesRepository
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -25,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * @author Asatryan on 19.05.19
  */
-class DI(private val application: App) {
+class DI(application: App) {
 
     private var retrofit: Retrofit
     private var repository: LaunchesRepository
@@ -35,12 +37,12 @@ class DI(private val application: App) {
     private var launchDetailsInteractor: LaunchDetailsInteractor? = null
 
     companion object {
-        const val BASE_URL = "https://api.spacexdata.com/v2/"
+        private const val BASE_URL = "https://api.spacexdata.com/v2/"
     }
 
     init {
         launchesCache = LaunchesCacheImpl(application.applicationContext)
-        connectionManager = ConnectionManagerImpl(application.applicationContext)
+        connectionManager = ConnectionManagerImpl(getConnectivityManager(application.applicationContext))
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
         repository = getLaunchesRepository()
     }
@@ -64,6 +66,9 @@ class DI(private val application: App) {
     }
 
     //region private methods
+
+    private fun getConnectivityManager(context: Context) =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
 
     private fun getConnectionManager() = connectionManager
 
@@ -99,7 +104,7 @@ class DI(private val application: App) {
         CloudLaunchesDataStore(getConnectionManager(), getLaunchService(retrofit), getLaunchesCache())
 
     private fun getLaunchesDataStoreFactory() =
-        LaunchesDataStoreFactory(getLaunchesCache(), getDiskLaunchesDataStore(), getCloudLaunchesDataStore())
+        LaunchesDataStoreFactoryImpl(getLaunchesCache(), getDiskLaunchesDataStore(), getCloudLaunchesDataStore())
 
     private fun makeLaunchesInteractor(repository: LaunchesRepository) =
         LaunchesInteractorImpl(repository, YearValidator())

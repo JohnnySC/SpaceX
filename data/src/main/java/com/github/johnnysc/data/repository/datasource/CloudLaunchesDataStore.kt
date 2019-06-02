@@ -16,28 +16,21 @@ class CloudLaunchesDataStore(
     private val launchesCache: LaunchesCache
 ) : LaunchesDataStore {
 
-    override suspend fun getLaunchEntityList(year: String): List<LaunchesEntity> {
+    override suspend fun getLaunchEntityList(year: String): List<LaunchesEntity> =
         if (connectionManager.isNetworkAbsent()) {
             throw NetworkConnectionException()
         } else {
-            val launchesAsync = launchesService.getLaunchesAsync(year)
-            val launches: List<LaunchesEntity>?
+            val launches: List<LaunchesEntity>
             try {
+                val launchesAsync = launchesService.getLaunchesAsync(year)
                 val result = launchesAsync.await()
-                if (result.isSuccessful) {
-                    launches = result.body()
-                    if (launches == null)
-                        throw ServerUnavailableException()
-                    launchesCache.put(year, launches)
-                } else {
-                    throw ServerUnavailableException()
-                }
-            } catch (e: Exception) {
-                throw NetworkConnectionException(e)
+                launches = result.body()!!
+                launchesCache.put(year, launches)
+            } catch (exception: Exception) {
+                throw ServerUnavailableException()
             }
-            return launches
+            launches
         }
-    }
 
     override suspend fun getLaunchDetails(year: String, id: Int) =
         throw UnsupportedOperationException("Operation is not available")

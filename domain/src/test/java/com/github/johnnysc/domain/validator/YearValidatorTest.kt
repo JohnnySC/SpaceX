@@ -1,7 +1,5 @@
-package com.github.johnnysc.spacex.data
+package com.github.johnnysc.domain.validator
 
-import com.github.johnnysc.domain.validator.Validator
-import com.github.johnnysc.domain.validator.YearValidator
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -9,6 +7,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
 
 /**
+ * @see YearValidator
+ *
  * @author Asatryan on 20.05.19
  */
 @RunWith(BlockJUnit4ClassRunner::class)

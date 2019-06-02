@@ -16,9 +16,7 @@ class SearchResultsViewModel(application: Application) : AndroidViewModel(applic
 
     private val interactor = (application as App).getDI().getSearchResultsInteractor()
 
-    fun showResults(year: String) {
-        viewModelScope.launch {
-            results.value = interactor.getSearchResults(year).map { it.missionName }
-        }
+    fun showResults(year: String) = viewModelScope.launch {
+        results.value = interactor.getSearchResults(year).map { it.missionName }
     }
 }

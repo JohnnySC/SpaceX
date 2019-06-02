@@ -2,7 +2,6 @@ package com.github.johnnysc.spacex.presentation
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -37,7 +36,6 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
                     Status.NO_CONNECTION -> showScreenWithId(R.id.no_connection)
                     Status.SERVICE_UNAVAILABLE -> showScreenWithId(R.id.service_unavailable)
                     Status.SUCCESS -> showScreenWithId(R.id.go_to_search_results)
-                    Status.UNKNOWN -> Log.e("MainScreenViewModel", "unknown exception")
                 }
             } else if (inputDataValid == false) {
                 errorState.postValue(R.string.invalid_input_message)

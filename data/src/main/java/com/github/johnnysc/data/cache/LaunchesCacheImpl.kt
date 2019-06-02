@@ -11,9 +11,10 @@ import com.google.gson.reflect.TypeToken
 class LaunchesCacheImpl(context: Context) : LaunchesCache {
 
     private val sharedPreferences = context.getSharedPreferences("cache", Context.MODE_PRIVATE)
+    private val gson = Gson()
 
     override fun put(year: String, launches: List<LaunchesEntity>) {
-        val json = Gson().toJson(launches)
+        val json = gson.toJson(launches)
         sharedPreferences.edit().putString(year, json).apply()
     }
 

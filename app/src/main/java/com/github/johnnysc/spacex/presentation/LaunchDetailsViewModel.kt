@@ -17,9 +17,7 @@ class LaunchDetailsViewModel(application: Application) : AndroidViewModel(applic
 
     private val interactor = (application as App).getDI().getLaunchDetailsInteractor()
 
-    fun showData(year: String, position: Int?) {
-        viewModelScope.launch {
-            launchData.value = interactor.getLaunchData(year, position ?: 0)
-        }
+    fun showData(year: String, position: Int?) = viewModelScope.launch {
+        launchData.value = interactor.getLaunchData(year, position ?: 0)
     }
 }
