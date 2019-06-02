@@ -1,27 +1,24 @@
 package com.github.johnnysc.spacex.presentation
 
-import android.app.Application
-import android.os.Bundle
 import androidx.annotation.IdRes
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.domain.interactor.Status
-import com.github.johnnysc.spacex.App
 import com.github.johnnysc.spacex.R
-import com.github.johnnysc.spacex.presentation.fragment.SearchResultsFragment.Companion.EXTRA_YEAR
+import com.github.johnnysc.spacex.di.DI
 import kotlinx.coroutines.*
 
 /**
  * @author Asatryan on 18.05.19
  */
-class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
+class MainScreenViewModel : ViewModel() {
 
-    val searchState = MutableLiveData<Pair<Int, Bundle>>()
-    val progressState = MutableLiveData<Boolean>()
-    val errorState = MutableLiveData<Int>()
+    var searchState = MutableLiveData<Pair<Int, String?>>()
+    var progressState = MutableLiveData<Boolean>()
+    var errorState = MutableLiveData<Int>()
 
-    private val interactor = (application as App).getDI().getLaunchesInteractor()
+    private val interactor = DI.getLaunchesInteractorImpl()
     private var job: Job? = null
     private var lastQuery: String? = null
 
@@ -45,7 +42,7 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     private fun showScreenWithId(@IdRes id: Int) {
         progressState.postValue(false)
-        searchState.postValue(Pair(id, Bundle().apply { putString(EXTRA_YEAR, lastQuery) }))
+        searchState.postValue(Pair(id, lastQuery))
     }
 
     private fun CoroutineScope.debounceLaunch(
@@ -53,7 +50,7 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
         block: suspend CoroutineScope.() -> Unit
     ): Job {
         job?.cancel()
-        return launch() {
+        return launch {
             delay(time)
             block()
         }.also {

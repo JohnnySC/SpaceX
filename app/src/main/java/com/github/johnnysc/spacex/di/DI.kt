@@ -1,11 +1,11 @@
 package com.github.johnnysc.spacex.di
 
+import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import com.github.johnnysc.data.cache.LaunchesCache
 import com.github.johnnysc.data.cache.LaunchesCacheImpl
 import com.github.johnnysc.data.entity.mapper.LaunchDataMapper
-import com.github.johnnysc.spacex.App
 import com.github.johnnysc.spacex.BuildConfig
 import com.github.johnnysc.domain.validator.YearValidator
 import com.github.johnnysc.data.net.ConnectionManager
@@ -27,22 +27,30 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * @author Asatryan on 19.05.19
  */
-class DI(application: App) {
+object DI {
 
-    private var retrofit: Retrofit
-    private var repository: LaunchesRepository
-    private var connectionManager: ConnectionManager
-    private var launchesCache: LaunchesCache
-    private var launchesInteractor: LaunchesInteractor? = null
-    private var launchDetailsInteractor: LaunchDetailsInteractor? = null
-
-    companion object {
-        private const val BASE_URL = "https://api.spacexdata.com/v2/"
+    sealed class Config {
+        object RELEASE : Config()
+        object TEST : Config()
     }
 
-    init {
-        launchesCache = LaunchesCacheImpl(application.applicationContext)
-        connectionManager = ConnectionManagerImpl(getConnectivityManager(application.applicationContext))
+    lateinit var config: Config
+        private set
+
+    var launchesInteractor: LaunchesInteractor? = null
+
+    private lateinit var retrofit: Retrofit
+    private lateinit var repository: LaunchesRepository
+    private lateinit var connectionManager: ConnectionManager
+    private lateinit var launchesCache: LaunchesCache
+    private var launchDetailsInteractor: LaunchDetailsInteractor? = null
+
+    private const val BASE_URL = "https://api.spacexdata.com/v2/"
+
+    fun initialize(app: Application, configuration: Config = DI.Config.RELEASE) {
+        config = configuration
+        launchesCache = LaunchesCacheImpl(app)
+        connectionManager = ConnectionManagerImpl(getConnectivityManager(app))
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
         repository = getLaunchesRepository()
     }
@@ -51,8 +59,8 @@ class DI(application: App) {
 
     fun getSearchResultsInteractor() = SearchResultsInteractorImpl(repository)
 
-    fun getLaunchesInteractor(): LaunchesInteractor {
-        if (launchesInteractor == null) {
+    fun getLaunchesInteractorImpl(): LaunchesInteractor {
+        if (config == Config.RELEASE && launchesInteractor == null) {
             launchesInteractor = makeLaunchesInteractor(repository)
         }
         return launchesInteractor!!

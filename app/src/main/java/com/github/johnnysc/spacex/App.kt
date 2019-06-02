@@ -8,12 +8,8 @@ import com.github.johnnysc.spacex.di.DI
  */
 class App : Application() {
 
-    private lateinit var di: DI
-
     override fun onCreate() {
         super.onCreate()
-        di = DI(this)
+        DI.initialize(this)
     }
-
-    fun getDI() = di
 }

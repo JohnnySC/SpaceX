@@ -1,20 +1,19 @@
 package com.github.johnnysc.spacex.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.johnnysc.spacex.App
+import com.github.johnnysc.spacex.di.DI
 import kotlinx.coroutines.launch
 
 /**
  * @author Asatryan on 19.05.19
  */
-class SearchResultsViewModel(application: Application) : AndroidViewModel(application) {
+class SearchResultsViewModel : ViewModel() {
 
     val results = MutableLiveData<List<String>>()
 
-    private val interactor = (application as App).getDI().getSearchResultsInteractor()
+    private val interactor = DI.getSearchResultsInteractor()
 
     fun showResults(year: String) = viewModelScope.launch {
         results.value = interactor.getSearchResults(year).map { it.missionName }

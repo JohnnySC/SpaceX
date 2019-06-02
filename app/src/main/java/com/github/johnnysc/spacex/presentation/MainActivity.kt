@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.github.johnnysc.spacex.R
+import com.github.johnnysc.spacex.presentation.fragment.SearchResultsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,8 +30,11 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController)
 
         viewModel = ViewModelProviders.of(this).get(MainScreenViewModel::class.java)
-        viewModel.searchState.observe(this, Observer<Pair<Int, Bundle>> { data ->
-            navController.navigate(data.first, data.second)
+        viewModel.searchState.observe(this, Observer<Pair<Int, String?>> { data ->
+            navController.navigate(
+                data.first,
+                Bundle().apply { putString(SearchResultsFragment.EXTRA_YEAR, data.second) }
+            )
         })
         viewModel.progressState.observe(this, Observer<Boolean> { show ->
             progressBar.visibility = if (show) View.VISIBLE else View.GONE
