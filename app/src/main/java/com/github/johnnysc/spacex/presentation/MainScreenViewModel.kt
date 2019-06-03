@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.domain.interactor.Status
 import com.github.johnnysc.spacex.R
-import com.github.johnnysc.spacex.di.DI
+import com.github.johnnysc.spacex.di.MainScreenModule
 import kotlinx.coroutines.*
 
 /**
@@ -18,7 +18,7 @@ class MainScreenViewModel : ViewModel() {
     var progressState = MutableLiveData<Boolean>()
     var errorState = MutableLiveData<Int>()
 
-    private val interactor = DI.getLaunchesInteractorImpl()
+    private val interactor = MainScreenModule.getLaunchesInteractorImpl()
     private var job: Job? = null
     private var lastQuery: String? = null
 

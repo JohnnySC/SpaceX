@@ -7,6 +7,7 @@ import com.github.johnnysc.domain.interactor.LaunchesInteractor
 import com.github.johnnysc.domain.interactor.Status
 import com.github.johnnysc.spacex.R
 import com.github.johnnysc.spacex.di.DI
+import com.github.johnnysc.spacex.di.MainScreenModule
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
 import kotlinx.coroutines.*
@@ -42,8 +43,8 @@ class MainScreenViewModelTest {
         Dispatchers.setMain(mainThreadSurrogate)
         val application = mock(Application::class.java)
         DI.initialize(application, DI.Config.TEST)
-        DI.launchesInteractor = mock(LaunchesInteractor::class.java)
-        interactor = DI.getLaunchesInteractorImpl()
+        MainScreenModule.setLaunchesInteractor(mock(LaunchesInteractor::class.java))
+        interactor = MainScreenModule.getLaunchesInteractorImpl()
 
         viewModel = MainScreenViewModel()
         viewModel.errorState = mock(MutableLiveDataInt::class.java)

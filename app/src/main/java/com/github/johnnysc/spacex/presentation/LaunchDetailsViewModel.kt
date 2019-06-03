@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.domain.LaunchData
-import com.github.johnnysc.spacex.di.DI
+import com.github.johnnysc.spacex.di.MainScreenModule
 import kotlinx.coroutines.launch
 
 /**
@@ -14,7 +14,7 @@ class LaunchDetailsViewModel : ViewModel() {
 
     val launchData = MutableLiveData<LaunchData>()
 
-    private val interactor = DI.getLaunchDetailsInteractor()
+    private val interactor = MainScreenModule.getLaunchDetailsInteractor()
 
     fun showData(year: String, position: Int?) = viewModelScope.launch {
         launchData.value = interactor.getLaunchData(year, position ?: 0)
