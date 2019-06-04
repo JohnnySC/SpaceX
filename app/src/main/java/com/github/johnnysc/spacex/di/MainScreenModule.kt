@@ -12,7 +12,6 @@ import com.github.johnnysc.data.repository.datasource.LaunchesDataStoreFactoryIm
 import com.github.johnnysc.domain.interactor.*
 import com.github.johnnysc.domain.repository.LaunchesRepository
 import com.github.johnnysc.domain.validator.YearValidator
-import retrofit2.Retrofit
 import java.lang.UnsupportedOperationException
 
 /**
@@ -21,9 +20,9 @@ import java.lang.UnsupportedOperationException
 object MainScreenModule {
 
     private lateinit var config: DI.Config
-    private lateinit var repository: LaunchesRepository
     private lateinit var launchesCache: LaunchesCache
 
+    private var repository: LaunchesRepository? = null
     private var launchDetailsInteractor: LaunchDetailsInteractor? = null
     private var launchesInteractor: LaunchesInteractor? = null
     private var searchResultsInteractor: SearchResultsInteractor? = null
@@ -31,12 +30,11 @@ object MainScreenModule {
     fun initialize(app: Application, configuration: DI.Config = DI.Config.RELEASE) {
         config = configuration
         launchesCache = LaunchesCacheImpl(app)
-        repository = getLaunchesRepository()
     }
 
     fun getLaunchesInteractorImpl(): LaunchesInteractor {
         if (config == DI.Config.RELEASE && launchesInteractor == null)
-            launchesInteractor = makeLaunchesInteractor(repository)
+            launchesInteractor = makeLaunchesInteractor(getLaunchesRepository())
         return launchesInteractor!!
     }
 
@@ -49,13 +47,13 @@ object MainScreenModule {
 
     fun getSearchResultsInteractor(): SearchResultsInteractor {
         if (searchResultsInteractor == null)
-            searchResultsInteractor = SearchResultsInteractorImpl(repository)
+            searchResultsInteractor = SearchResultsInteractorImpl(getLaunchesRepository())
         return searchResultsInteractor!!
     }
 
     fun getLaunchDetailsInteractor(): LaunchDetailsInteractor {
         if (launchDetailsInteractor == null)
-            launchDetailsInteractor = getLaunchDetailsInteractor(repository)
+            launchDetailsInteractor = getLaunchDetailsInteractor(getLaunchesRepository())
         return launchDetailsInteractor!!
     }
 
@@ -67,17 +65,18 @@ object MainScreenModule {
     private fun makeLaunchesInteractor(repository: LaunchesRepository) =
         LaunchesInteractorImpl(repository, YearValidator())
 
-    private fun getLaunchesRepository() =
-        LaunchesRepositoryImpl(getLaunchesDataStoreFactory(), LaunchDataMapper())
+    private fun getLaunchesRepository(): LaunchesRepository {
+        if (repository == null)
+            repository = LaunchesRepositoryImpl(getLaunchesDataStoreFactory(), LaunchDataMapper())
+        return repository!!
+    }
 
     private fun getDiskLaunchesDataStore() = DiskLaunchesDataStore(launchesCache)
     private fun getCloudLaunchesDataStore() = CloudLaunchesDataStore(
         NetworkModule.connectionManager,
-        getLaunchService(NetworkModule.retrofit),
+        NetworkModule.getService(LaunchesService::class.java),
         launchesCache
     )
-
-    private fun getLaunchService(retrofit: Retrofit) = retrofit.create(LaunchesService::class.java)
 
     private fun getLaunchesDataStoreFactory() =
         LaunchesDataStoreFactoryImpl(launchesCache, getDiskLaunchesDataStore(), getCloudLaunchesDataStore())

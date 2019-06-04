@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile project(':domain')
+    api project(':domain')
     api project(':data')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])

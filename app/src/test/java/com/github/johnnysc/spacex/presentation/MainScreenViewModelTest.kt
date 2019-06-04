@@ -11,7 +11,9 @@ import com.github.johnnysc.spacex.di.MainScreenModule
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.stub
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.*
@@ -51,6 +53,10 @@ class MainScreenViewModelTest {
         viewModel.searchState = mock(MutableLiveDataPair::class.java)
         viewModel.progressState = mock(MutableLiveDataBoolean::class.java)
     }
+
+    @ExperimentalCoroutinesApi
+    @After
+    fun tearDown() = Dispatchers.resetMain()
 
     @Test
     fun testInvalidInputData() {

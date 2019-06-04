@@ -21,12 +21,14 @@ object NetworkModule {
     private const val BASE_URL = "https://api.spacexdata.com/v2/"
 
     lateinit var connectionManager: ConnectionManager
-    lateinit var retrofit: Retrofit
+    private lateinit var retrofit: Retrofit
 
     fun initialize(app: Application) {
         connectionManager = ConnectionManagerImpl(getConnectivityManager(app))
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
     }
+
+    fun <T> getService(className:Class<T>): T = retrofit.create(className)
 
     private fun getConnectivityManager(context: Context) =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?

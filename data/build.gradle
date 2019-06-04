@@ -47,7 +47,7 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:$okhttp_version"
     api "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
 
-    compile project(':domain')
+    implementation project(':domain')
 
 }
 repositories {
