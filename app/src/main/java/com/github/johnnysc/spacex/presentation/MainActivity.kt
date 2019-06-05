@@ -2,6 +2,7 @@ package com.github.johnnysc.spacex.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity(), RetryListener {
         menuInflater.inflate(R.menu.main_menu, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
+        searchView.inputType = InputType.TYPE_CLASS_NUMBER
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String) = fetch(query)
 

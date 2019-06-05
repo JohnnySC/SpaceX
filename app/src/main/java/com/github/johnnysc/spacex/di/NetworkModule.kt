@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Asatryan on 03.06.19
@@ -28,7 +29,7 @@ object NetworkModule {
         retrofit = getRetrofit(getOkHttpClient(getInterceptor()))
     }
 
-    fun <T> getService(className:Class<T>): T = retrofit.create(className)
+    fun <T> getService(className: Class<T>): T = retrofit.create(className)
 
     private fun getConnectivityManager(context: Context) =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
@@ -42,7 +43,11 @@ object NetworkModule {
             .build()
 
     private fun getOkHttpClient(interceptor: Interceptor) =
-        OkHttpClient().newBuilder().addInterceptor(interceptor).build()
+        OkHttpClient().newBuilder()
+            .addInterceptor(interceptor)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .build()
 
 
     private fun getInterceptor(): Interceptor =
