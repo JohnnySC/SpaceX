@@ -12,10 +12,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.github.johnnysc.spacex.R
+import com.github.johnnysc.spacex.presentation.fragment.RetryListener
 import com.github.johnnysc.spacex.presentation.fragment.SearchResultsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RetryListener {
 
     private lateinit var viewModel: MainScreenViewModel
 
@@ -67,4 +68,5 @@ class MainActivity : AppCompatActivity() {
             true
         } else super.onOptionsItemSelected(item)
 
+    override fun retry() = viewModel.fetch()
 }

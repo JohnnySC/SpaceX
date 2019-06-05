@@ -20,7 +20,7 @@ class MainScreenViewModel : ViewModel() {
 
     private val interactor = MainScreenModule.getLaunchesInteractorImpl()
     private var job: Job? = null
-    private var lastQuery: String? = null
+    private var lastQuery: String = ""
 
     fun fetch(query: String) {
         viewModelScope.debounceLaunch(300) {
@@ -39,6 +39,8 @@ class MainScreenViewModel : ViewModel() {
             }
         }
     }
+
+    fun fetch() = fetch(lastQuery)
 
     private fun showScreenWithId(@IdRes id: Int) {
         progressState.postValue(false)

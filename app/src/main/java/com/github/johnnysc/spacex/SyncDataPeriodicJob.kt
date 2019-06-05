@@ -3,8 +3,6 @@ package com.github.johnnysc.spacex
 import android.content.Context
 import androidx.work.*
 import com.github.johnnysc.spacex.di.MainScreenModule
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -30,13 +28,11 @@ class SyncDataPeriodicJob {
     }
 }
 
-class SyncDataPeriodicWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+private class SyncDataPeriodicWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
 
-    override fun doWork(): Result {
-        GlobalScope.launch {
-            val currentYear = Calendar.getInstance().get(Calendar.YEAR).toString()
-            MainScreenModule.getLaunchesInteractorImpl().fetch(currentYear)
-        }
+    override suspend fun doWork(): Result {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR).toString()
+        MainScreenModule.getLaunchesInteractorImpl().fetch(currentYear)
         return Result.success()
     }
 }

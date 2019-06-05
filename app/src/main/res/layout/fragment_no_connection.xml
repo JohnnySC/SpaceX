@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:text="@string/no_connection"
-          android:gravity="center"
-          android:textAppearance="@style/ErrorTextStyle"
-          android:layout_height="match_parent"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:text="@string/no_connection"
+            android:gravity="center"
+            android:textAppearance="@style/ErrorTextStyle"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:text="@string/retry"
+            android:id="@+id/retryButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>
