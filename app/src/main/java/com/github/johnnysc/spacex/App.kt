@@ -11,5 +11,6 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         DI.initialize(this)
+        SyncDataPeriodicJob().start()
     }
 }
