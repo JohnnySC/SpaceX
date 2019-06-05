@@ -22,13 +22,13 @@ class MainScreenViewModel : ViewModel() {
     private var job: Job? = null
     private var lastQuery: String? = null
 
-    fun fetch(query: String?) {
-        lastQuery = query
+    fun fetch(query: String) {
         viewModelScope.debounceLaunch(300) {
+            lastQuery = query
             val inputDataValid = interactor.isInputDataValid(query)
             if (inputDataValid == true) {
                 progressState.postValue(true)
-                when (interactor.fetch(query!!)) {
+                when (interactor.fetch(query)) {
                     Status.NO_RESULTS -> showScreenWithId(R.id.no_results)
                     Status.NO_CONNECTION -> showScreenWithId(R.id.no_connection)
                     Status.SERVICE_UNAVAILABLE -> showScreenWithId(R.id.service_unavailable)

@@ -57,6 +57,9 @@ dependencies {
         exclude group: "com.android.support"
     }
 
+    //AAC workmanager
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
     //kotlin coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version"

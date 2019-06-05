@@ -39,20 +39,37 @@ class LaunchesDataStoreFactoryTest {
     }
 
     @Test
-    fun testDiskDataSourceFactory() {
+    fun testDiskDataSourceFactoryWhenCacheRequiredAndDataCached() {
         Mockito.`when`(launchesCache.isCached(STUB_YEAR)).thenReturn(true)
 
-        val actual = launchesDataStoreFactory.create(STUB_YEAR)
+        val actual = launchesDataStoreFactory.create(STUB_YEAR, LaunchesDataStoreFactory.Priority.CACHE)
 
         assertThat(actual, `is`(instanceOf(DiskLaunchesDataStore::class.java)))
-
     }
 
     @Test
-    fun testCloudDataSourceFactory() {
+    fun testCloudDataSourceFactoryWhenCloudRequiredAndDataNotCached() {
+        Mockito.`when`(launchesCache.isCached(STUB_YEAR)).thenReturn(true)
+
+        val actual = launchesDataStoreFactory.create(STUB_YEAR, LaunchesDataStoreFactory.Priority.CLOUD)
+
+        assertThat(actual, `is`(instanceOf(CloudLaunchesDataStore::class.java)))
+    }
+
+    @Test
+    fun testCloudDataSourceFactoryWhenCacheRequiredButDataNotCached() {
         Mockito.`when`(launchesCache.isCached(STUB_YEAR)).thenReturn(false)
 
-        val actual = launchesDataStoreFactory.create(STUB_YEAR)
+        val actual = launchesDataStoreFactory.create(STUB_YEAR, LaunchesDataStoreFactory.Priority.CACHE)
+
+        assertThat(actual, `is`(instanceOf(CloudLaunchesDataStore::class.java)))
+    }
+
+    @Test
+    fun testCloudDataSourceFactoryWhenCloudRequiredAndDataCached() {
+        Mockito.`when`(launchesCache.isCached(STUB_YEAR)).thenReturn(false)
+
+        val actual = launchesDataStoreFactory.create(STUB_YEAR, LaunchesDataStoreFactory.Priority.CLOUD)
 
         assertThat(actual, `is`(instanceOf(CloudLaunchesDataStore::class.java)))
     }

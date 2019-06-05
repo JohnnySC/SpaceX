@@ -12,6 +12,4 @@ interface LaunchesCache {
     fun get(year: String): List<LaunchesEntity>
 
     fun isCached(year: String): Boolean
-
-    fun evict(year: String)
 }

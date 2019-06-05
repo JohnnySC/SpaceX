@@ -11,14 +11,19 @@ class LaunchesDataStoreFactoryImpl(
     private val cloudLaunchesDataStore: CloudLaunchesDataStore
 ) : LaunchesDataStoreFactory {
 
-    override fun create(year: String) =
-        if (launchesCache.isCached(year))
-            diskLaunchesDataStore
-        else
+    override fun create(year: String, priority: LaunchesDataStoreFactory.Priority) =
+        if (priority == LaunchesDataStoreFactory.Priority.CLOUD || !launchesCache.isCached(year))
             cloudLaunchesDataStore
+        else
+            diskLaunchesDataStore
 }
 
 interface LaunchesDataStoreFactory {
 
-    fun create(year: String): LaunchesDataStore
+    enum class Priority {
+        CLOUD,
+        CACHE
+    }
+
+    fun create(year: String, priority: Priority): LaunchesDataStore
 }

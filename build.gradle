@@ -34,6 +34,7 @@ ext {
     lifecycle_version = "2.2.0-alpha01"
     picasso_version = "2.71828"
     mockito_version = "2.6.3"
+    work_version = "2.0.1"
 }
 
 task clean(type: Delete) {

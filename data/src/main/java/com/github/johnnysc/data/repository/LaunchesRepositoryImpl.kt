@@ -13,8 +13,9 @@ class LaunchesRepositoryImpl(
     private val launchDataMapper: LaunchDataMapper
 ) : LaunchesRepository {
 
-    override suspend fun getLaunches(year: String): List<LaunchData> {
-        val dataStore = launchesDataStoreFactory.create(year)
+    override suspend fun getLaunches(year: String, reload: Boolean): List<LaunchData> {
+        val priority = if (reload) LaunchesDataStoreFactory.Priority.CLOUD else LaunchesDataStoreFactory.Priority.CACHE
+        val dataStore = launchesDataStoreFactory.create(year, priority)
         return launchDataMapper.map(dataStore.getLaunchEntityList(year))
     }
 

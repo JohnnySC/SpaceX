@@ -29,6 +29,4 @@ class LaunchesCacheImpl(context: Context) : LaunchesCache {
         val value = sharedPreferences.getString(year, null)
         return value?.isNotEmpty() ?: false
     }
-
-    override fun evict(year: String) = sharedPreferences.edit().putString(year, null).apply()
 }

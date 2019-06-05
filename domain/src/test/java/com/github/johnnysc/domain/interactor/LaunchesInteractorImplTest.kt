@@ -76,13 +76,13 @@ class LaunchesInteractorImplTest {
 }
 
 class EmptyListRepositoryImpl : LaunchesRepository {
-    override suspend fun getLaunches(year: String) = emptyList<LaunchData>()
+    override suspend fun getLaunches(year: String, reload: Boolean) = emptyList<LaunchData>()
     override suspend fun getLaunchData(year: String, id: Int) =
         throw UnsupportedOperationException("no need to use this here")
 }
 
 class OneItemListRepositoryImpl : LaunchesRepository {
-    override suspend fun getLaunches(year: String) = listOf(getData())
+    override suspend fun getLaunches(year: String, reload: Boolean) = listOf(getData())
     override suspend fun getLaunchData(year: String, id: Int) =
         throw UnsupportedOperationException("no need to use this here")
 
@@ -108,13 +108,13 @@ class OneItemListRepositoryImpl : LaunchesRepository {
 }
 
 class NetworkExceptionRepositoryImpl : LaunchesRepository {
-    override suspend fun getLaunches(year: String) = throw NetworkConnectionException()
+    override suspend fun getLaunches(year: String, reload: Boolean) = throw NetworkConnectionException()
     override suspend fun getLaunchData(year: String, id: Int) =
         throw UnsupportedOperationException("no need to use this here")
 }
 
 class ServiceUnavailableExceptionRepositoryImpl : LaunchesRepository {
-    override suspend fun getLaunches(year: String) = throw ServerUnavailableException()
+    override suspend fun getLaunches(year: String, reload: Boolean) = throw ServerUnavailableException()
     override suspend fun getLaunchData(year: String, id: Int) =
         throw UnsupportedOperationException("no need to use this here")
 }

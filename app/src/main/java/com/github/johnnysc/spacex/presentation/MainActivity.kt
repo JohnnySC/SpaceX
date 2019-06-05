@@ -49,11 +49,11 @@ class MainActivity : AppCompatActivity() {
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?) = fetch(query)
+            override fun onQueryTextSubmit(query: String) = fetch(query)
 
-            override fun onQueryTextChange(newText: String?) = fetch(newText)
+            override fun onQueryTextChange(newText: String) = fetch(newText)
 
-            private fun fetch(text: String?): Boolean {
+            private fun fetch(text: String): Boolean {
                 viewModel.fetch(text)
                 return true
             }

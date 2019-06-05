@@ -8,7 +8,7 @@ import com.github.johnnysc.domain.LaunchData
  */
 interface LaunchesRepository {
 
-    suspend fun getLaunches(year: String): List<LaunchData>
+    suspend fun getLaunches(year: String, reload: Boolean = false): List<LaunchData>
 
     suspend fun getLaunchData(year: String, id: Int): LaunchData
 }
