@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import com.github.johnnysc.spacex.R
 import com.github.johnnysc.spacex.presentation.SearchResultsViewModel
+import com.github.johnnysc.spacex.presentation.details.LaunchDetailsFragment
 import kotlinx.android.synthetic.main.fragment_search_results.*
 import java.util.*
 

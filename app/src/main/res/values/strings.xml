@@ -10,4 +10,14 @@
     <string name="service_unavailable">Service is unavailable. Try again later.</string>
     <string name="invalid_input_message">Input data is invalid! Please type the year of launches (e.g. 2018)</string>
     <string name="retry">retry</string>
+    <string name="mission_name">Mission name: %s</string>
+    <string name="flight_number">Flight N: %s</string>
+    <string name="launch_year">Launch year: %s</string>
+    <string name="launch_date">Launch date: %s</string>
+    <string name="rocket">Rocket info: %s</string>
+    <string name="ships">Ships: %s</string>
+    <string name="place">Launch place: %s</string>
+    <string name="launch_success">Launch Success</string>
+    <string name="details">Details: %s</string>
+    <string name="pdf">PDF: %s</string>
 </resources>

@@ -32,7 +32,7 @@
 
     <fragment android:id="@+id/details_screen"
               android:label="@string/app_name"
-              android:name="com.github.johnnysc.spacex.presentation.fragment.LaunchDetailsFragment"
+              android:name="com.github.johnnysc.spacex.presentation.details.LaunchDetailsFragment"
               tools:layout="@layout/fragment_launch_details"/>
 
     <action android:id="@+id/go_to_search_results"

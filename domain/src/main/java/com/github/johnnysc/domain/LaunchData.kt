@@ -23,11 +23,11 @@ data class LaunchData(
     val timeline: Map<String, Int>?
 )
 
-data class Link(val address: String)
+data class Link(val title: String, val address: String)
 
 data class ImageLink(val address: String)
 
-data class PDFLink(val address: String)
+data class PDFLink(val title: String, val address: String)
 
 data class RocketData(
     val name: String,

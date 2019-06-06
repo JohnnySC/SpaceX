@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          android:layout_width="match_parent"
+          android:id="@+id/linkTextView"
+          tools:text="some link"
+          android:padding="@dimen/padding_small"
+          android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+          android:layout_height="wrap_content"/>

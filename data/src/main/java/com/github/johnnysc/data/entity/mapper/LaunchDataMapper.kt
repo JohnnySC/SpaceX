@@ -60,9 +60,9 @@ class LaunchDataMapper : Mapper<List<LaunchesEntity>, List<LaunchData>> {
 
     private fun getPDFs(data: Map<String, Any>): List<PDFLink> {
         val list = ArrayList<PDFLink>()
-        data.forEach { (_, value) ->
+        data.forEach { (key, value) ->
             if (value is String && value.endsWith(".pdf"))
-                list.add(PDFLink(value))
+                list.add(PDFLink(key, value))
         }
         return list
     }
@@ -76,7 +76,7 @@ class LaunchDataMapper : Mapper<List<LaunchesEntity>, List<LaunchData>> {
                     !value.endsWith(".jpg") &&
                     !value.endsWith(".jpeg")
                 )
-                    list.add(Link(value))
+                    list.add(Link(key, value))
             }
         }
         return list
@@ -107,7 +107,10 @@ class LaunchDataMapper : Mapper<List<LaunchesEntity>, List<LaunchData>> {
 
     private fun makeLinks(data: Map<String?, String?>): List<Link> {
         val list = ArrayList<Link>(data.size)
-        data.forEach { (_, v) -> if (!v.isNullOrEmpty()) list.add(Link(v)) }
+        data.forEach { (k, v) ->
+            if (!k.isNullOrEmpty() && !v.isNullOrEmpty())
+                list.add(Link(k, v))
+        }
         return list
     }
 
